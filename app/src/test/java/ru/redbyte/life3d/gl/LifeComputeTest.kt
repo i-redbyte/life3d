@@ -6,7 +6,6 @@ import org.junit.Test
 import ru.redbyte.life3d.domain.NEIGHBOUR_COUNTS
 
 class LifeComputeTest {
-
     private val compute = lifeCompute()
 
     @Test

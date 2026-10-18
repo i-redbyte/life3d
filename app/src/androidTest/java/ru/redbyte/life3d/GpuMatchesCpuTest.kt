@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import ru.redbyte.life3d.domain.CpuLife
 import ru.redbyte.life3d.domain.FieldMode
 import ru.redbyte.life3d.domain.LifeRule
+import ru.redbyte.life3d.domain.Rule
 import ru.redbyte.life3d.domain.Seeder
 import ru.redbyte.life3d.gl.WORKGROUP_EDGE
 import ru.redbyte.life3d.gl.lifeCompute
@@ -20,36 +21,51 @@ import ru.redbyte.redbytefx.gl.Gles30Device
 import ru.redbyte.redbytefx.gl.GlProgramRuntime
 import kotlin.random.Random
 
-/**
- * Runs the compute shader on the device GPU and checks every cell against [CpuLife], for each
- * rule, on a torus and on an infinite field whose window shifts.
- */
 @RunWith(AndroidJUnit4::class)
 class GpuMatchesCpuTest {
-
     private val n = 16
     private val total = n * n * n
 
     @Test
     fun everyRuleMatchesTheCpuReferenceOnATorus() = onEs31 { runtime ->
-        for (rule in LifeRule.entries) check(runtime, rule, FieldMode.Torus, intArrayOf(0, 0, 0))
+        for (preset in LifeRule.entries) check(runtime, preset, FieldMode.Torus, intArrayOf(0, 0, 0))
     }
 
     @Test
     fun anInfiniteFieldMatchesTheCpuReferenceWithAndWithoutAShift() = onEs31 { runtime ->
-        check(runtime, LifeRule.Sponge, FieldMode.Infinite, intArrayOf(0, 0, 0))
+        check(runtime, LifeRule.Amoeba, FieldMode.Infinite, intArrayOf(0, 0, 0))
         check(runtime, LifeRule.Reef, FieldMode.Infinite, intArrayOf(3, -2, 1))
-        check(runtime, LifeRule.Pulse, FieldMode.Infinite, intArrayOf(-4, 4, -4))
+        check(runtime, LifeRule.Lava, FieldMode.Infinite, intArrayOf(-4, 4, -4))
     }
 
-    private fun check(runtime: Pair<GlProgramRuntime, ru.redbyte.life3d.gl.LifeCompute>, rule: LifeRule, mode: FieldMode, shift: IntArray) {
+    @Test
+    fun refractoryStatesMatchTheCpuReferenceForEveryNumberOfStates() = onEs31 { runtime ->
+        for (states in listOf(2, 3, 5, 10)) {
+            val rule = Rule(birth = setOf(4, 6, 7, 8), survive = setOf(4, 5, 6, 7), states = states)
+            check(runtime, LifeRule.Lava, FieldMode.Torus, intArrayOf(0, 0, 0), rule)
+            check(runtime, LifeRule.Lava, FieldMode.Infinite, intArrayOf(2, 0, -3), rule)
+        }
+    }
+
+    private fun check(
+        runtime: Pair<GlProgramRuntime, ru.redbyte.life3d.gl.LifeCompute>,
+        preset: LifeRule,
+        mode: FieldMode,
+        shift: IntArray,
+        rule: Rule = preset.rule,
+    ) {
         val (gpu, compute) = runtime
-        val seed = Seeder.seed(n, cells = 900, density = rule.seedDensity, random = Random(rule.ordinal + 11))
-        for (i in seed.indices) if (seed[i] > 0f && i % 3 == 0) seed[i] = 7f
+        val seed = Seeder.seed(n, cells = 900, density = preset.seedDensity, random = Random(preset.ordinal + 11))
+
+        for (i in seed.indices) {
+            if (seed[i] > 0f && i % 3 == 0) seed[i] = 7f
+            if (seed[i] == 0f && i % 7 == 0 && rule.decay > 0) seed[i] = -(1 + i % rule.decay).toFloat()
+        }
         val world = FloatArray(2 * total)
         seed.copyInto(world)
         gpu.set(compute.world, world)
         gpu.set(compute.rules, rule.uniformValues())
+        gpu.set(compute.decay, rule.decay)
         gpu.set(compute.size, n)
         gpu.set(compute.readOffset, 0)
         gpu.set(compute.writeOffset, total)
@@ -64,7 +80,7 @@ class GpuMatchesCpuTest {
         gpu.read(compute.world, back)
 
         val expected = CpuLife.step(seed, n, rule, mode, shift)
-        assertArrayEquals("$rule $mode ${shift.toList()}", expected, back.copyOfRange(total, 2 * total), 0f)
+        assertArrayEquals("${rule.notation} $mode ${shift.toList()}", expected, back.copyOfRange(total, 2 * total), 0f)
     }
 
     private fun onEs31(block: (Pair<GlProgramRuntime, ru.redbyte.life3d.gl.LifeCompute>) -> Unit) {
@@ -85,7 +101,6 @@ class GpuMatchesCpuTest {
     }
 }
 
-/** A 1×1 pbuffer with an OpenGL ES 3.1 context current on the calling thread. */
 private class Es31Pbuffer {
     private var display: EGLDisplay = EGL14.EGL_NO_DISPLAY
     private var context: EGLContext = EGL14.EGL_NO_CONTEXT

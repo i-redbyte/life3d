@@ -8,15 +8,13 @@ import org.junit.Test
 import ru.redbyte.life3d.domain.CpuLife
 import ru.redbyte.life3d.domain.FieldMode
 import ru.redbyte.life3d.domain.cellIndex
-import ru.redbyte.life3d.domain.InstancePacker
 import ru.redbyte.life3d.domain.LifeRule
 import ru.redbyte.life3d.domain.LifeSettings
 import ru.redbyte.life3d.domain.StartCells
 import kotlin.random.Random
 
 class LifeEngineTest {
-
-    private val settings = LifeSettings(gridSize = 16, rule = LifeRule.Bays4555, start = StartCells(300, false))
+    private val settings = LifeSettings(gridSize = 24, rule = LifeRule.Bays4555, start = StartCells(300, false))
     private val n = settings.gridSize
     private val total = n * n * n
 
@@ -30,7 +28,7 @@ class LifeEngineTest {
         assertEquals(0, engine.generation)
         assertEquals(300, engine.latest.population)
         assertEquals(n, gpu.size)
-        assertArrayEquals(settings.rule.uniformValues(), gpu.rules, 0f)
+        assertArrayEquals(settings.rule.rule.uniformValues(), gpu.rules, 0f)
         assertEquals(2 * total, gpu.world.size)
     }
 
@@ -45,9 +43,9 @@ class LifeEngineTest {
 
         assertEquals(listOf(0 to total), gpu.offsets)
         assertEquals(n / 4, gpu.groups)
-        val expected = InstancePacker.pack(CpuLife.step(seed, n, settings.rule), 0, n)
-        assertEquals(expected.population, engine.latest.population)
-        assertArrayEquals(expected.instances, engine.latest.instances, 0f)
+        val expected = CpuLife.step(seed, n, settings.rule.rule)
+        assertArrayEquals(expected, engine.latest.cells, 0f)
+        assertEquals(expected.count { it > 0.5f }, engine.latest.population)
         assertEquals(1, engine.generation)
 
         engine.tick()
@@ -93,7 +91,7 @@ class LifeEngineTest {
         val engine = LifeEngine(open, gpu, Random(3))
         engine.start()
         assertEquals(listOf(false), gpu.wraps)
-        // A colony that wandered into the window's corner.
+
         val corner = FloatArray(2 * total)
         for (z in 0..1) for (y in 0..1) for (x in 0..1) corner[cellIndex(x, y, z, n)] = 1f
         gpu.upload(corner)
@@ -103,10 +101,10 @@ class LifeEngineTest {
 
         engine.tick()
 
-        assertEquals(listOf(-4, -4, -4), gpu.shifts.last())
-        assertEquals(listOf(-4, -4, -4), engine.latest.origin.toList())
-        // Same world place: window cell 4 at origin -4 is world cell 0.
-        assertEquals(listOf(4.5f, 4.5f, 4.5f), engine.latest.centroid.toList())
+        assertEquals(listOf(-6, -6, -6), gpu.shifts.last())
+        assertEquals(listOf(-6, -6, -6), engine.latest.origin.toList())
+
+        assertEquals(listOf(6.5f, 6.5f, 6.5f), engine.latest.centroid.toList())
     }
 
     @Test
@@ -123,7 +121,7 @@ class LifeEngineTest {
         engine.spark(floatArrayOf(1f, 1f, 1f))
         engine.tick()
 
-        assertEquals(listOf(5f, 5f, 5f), gpu.sparks.last().take(3))
+        assertEquals(listOf(7f, 7f, 7f), gpu.sparks.last().take(3))
     }
 
     @Test
@@ -144,7 +142,6 @@ class LifeEngineTest {
     }
 }
 
-/** Runs the generation on the CPU; with [deferred], a read back completes only on [finish]. */
 private class CpuGpu(private val deferred: Boolean) : LifeGpu {
     var size = 0
     val wraps = mutableListOf<Boolean>()
@@ -164,8 +161,10 @@ private class CpuGpu(private val deferred: Boolean) : LifeGpu {
 
     override fun rules(values: FloatArray) {
         rules = values.copyOf()
-        rule = LifeRule.entries.first { it.uniformValues().contentEquals(values) }
+        rule = LifeRule.entries.first { it.rule.uniformValues().contentEquals(values) }
     }
+
+    override fun decay(states: Int) = Unit
 
     override fun wrap(torus: Boolean) {
         wraps += torus
@@ -193,7 +192,7 @@ private class CpuGpu(private val deferred: Boolean) : LifeGpu {
         val (read, write) = offsets.last()
         val total = size * size * size
         val mode = if (wraps.last()) FieldMode.Torus else FieldMode.Infinite
-        val next = CpuLife.step(world.copyOfRange(read, read + total), size, rule, mode, shift)
+        val next = CpuLife.step(world.copyOfRange(read, read + total), size, rule.rule, mode, shift)
         next.copyInto(world, write)
     }
 

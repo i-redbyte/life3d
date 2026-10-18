@@ -51,7 +51,7 @@ import ru.redbyte.life3d.R
 import ru.redbyte.life3d.domain.FieldMode
 import ru.redbyte.life3d.domain.LifeSettings
 import ru.redbyte.life3d.domain.OrbitCamera
-import ru.redbyte.life3d.domain.fieldToCell
+import ru.redbyte.life3d.domain.torusCell
 import ru.redbyte.life3d.domain.worldToCell
 import ru.redbyte.life3d.engine.ControllerGpu
 import ru.redbyte.life3d.engine.LifeEngine
@@ -65,10 +65,6 @@ import ru.redbyte.redbytefx.gl.compose.GlSurface
 import ru.redbyte.redbytefx.gl.compose.GlSurfaceConfig
 import ru.redbyte.redbytefx.gl.compose.rememberGlController
 
-/**
- * The living field. Two GL views share this screen: an invisible [GlCompute] that runs the
- * generations, and a [GlSurface] that draws them. System back returns to the start screen.
- */
 @Composable
 fun GameScreen(settings: LifeSettings, onBack: () -> Unit) {
     BackHandler(onBack = onBack)
@@ -111,7 +107,6 @@ fun GameScreen(settings: LifeSettings, onBack: () -> Unit) {
             .background(LifeColors.Background)
             .windowInsetsPadding(WindowInsets.safeDrawing),
     ) {
-        // The compute host draws nothing; it only needs a window surface for its EGL context.
         GlCompute(controller = computeController, modifier = Modifier.size(1.dp), overlay = {})
         GlSurface(
             controller = sceneController,
@@ -123,10 +118,8 @@ fun GameScreen(settings: LifeSettings, onBack: () -> Unit) {
                     detectTapGestures { tap ->
                         renderer.touchedAt = System.nanoTime()
                         val point = camera.pick(tap.x, tap.y, size.width.toFloat(), size.height.toFloat())
-                        val cell = when (settings.mode) {
-                            FieldMode.Torus -> fieldToCell(clampToField(point), engine.n, renderer.drift())
-                            FieldMode.Infinite -> worldToCell(point, engine.n)
-                        }
+                        val world = worldToCell(point)
+                        val cell = if (settings.mode == FieldMode.Torus) torusCell(world, engine.n) else world
                         engine.spark(cell)
                     }
                 },
@@ -245,8 +238,5 @@ private fun Unsupported() {
         )
     }
 }
-
-/** A torus spans `[-1, 1]` on each axis; a tap outside it aims at its nearest face. */
-private fun clampToField(point: FloatArray): FloatArray = FloatArray(3) { point[it].coerceIn(-1f, 1f) }
 
 private const val HINT_MILLIS = 5_000L

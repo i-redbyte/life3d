@@ -4,7 +4,6 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- An isometric cube of eight live cells. -->
     <path android:fillColor="#FF3EF2C4" android:pathData="M54,30 L72,40 L54,50 L36,40 Z" />
     <path android:fillColor="#FF1BA98A" android:pathData="M36,40 L54,50 L54,72 L36,62 Z" />
     <path android:fillColor="#FF0E6E5E" android:pathData="M54,50 L72,40 L72,62 L54,72 Z" />

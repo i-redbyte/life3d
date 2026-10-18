@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import ru.redbyte.life3d.domain.CellPalette
 
-/** Colours of the app shell; the window, system bars, and both screens share [Background]. */
 object LifeColors {
     val Background = Color(0xFF060B14)
     val Panel = Color(0xCC0C1626)
@@ -15,7 +14,6 @@ object LifeColors {
     val TextDim = Color(0xFF8FA5BF)
 }
 
-/** The palette entry as a Compose colour. */
 val CellPalette.color: Color get() = Color(red, green, blue)
 
 @Composable

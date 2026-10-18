@@ -7,7 +7,6 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 class OrbitCameraTest {
-
     @Test
     fun aTapInTheMiddleOfTheScreenAimsAtTheTarget() {
         val camera = OrbitCamera()
@@ -76,23 +75,14 @@ class OrbitCameraTest {
     }
 
     @Test
-    fun aFieldPointMapsToTheCellUnderItAfterTheDrift() {
-        val cell = fieldToCell(floatArrayOf(-0.9f, 0.1f, 0.5f), n = 10, drift = floatArrayOf(0f, 0f, 0f))
+    fun worldPointsAndCellsConvertBothWaysAndTorusCellsWrap() {
+        val cell = worldToCell(floatArrayOf(0.05f, -1.05f, 2.05f))
+
         assertEquals(0f, cell[0], 1e-4f)
-        assertEquals(5f, cell[1], 1e-4f)
-        assertEquals(7f, cell[2], 1e-4f)
-
-        val drifted = fieldToCell(floatArrayOf(-0.9f, 0.1f, 0.1f), n = 10, drift = floatArrayOf(3f, 0f, 0f))
-        assertEquals("wraps below zero", 7f, drifted[0], 1e-4f)
-    }
-
-    @Test
-    fun aWorldPointOfAnInfiniteFieldMapsToAWorldCellWithoutWrapping() {
-        val cell = worldToCell(floatArrayOf(-2.9f, 0.1f, 3.1f), n = 10)
-
-        assertEquals(-10f, cell[0], 1e-4f)
-        assertEquals(5f, cell[1], 1e-4f)
+        assertEquals(-11f, cell[1], 1e-4f)
         assertEquals(20f, cell[2], 1e-4f)
-        assertTrue(abs(cellToWorld(-10f, 10) + 2.9f) < 1e-4f)
+        assertEquals(2.05f, cellToWorld(20f), 1e-5f)
+        val wrapped = torusCell(floatArrayOf(-1f, 25f, 7.5f), n = 8)
+        assertEquals(listOf(7f, 1f, 7.5f), wrapped.toList())
     }
 }

@@ -3,7 +3,8 @@
 Conway's Game of Life in three dimensions for Android, built with
 [RedByteFX](https://github.com/i-redbyte/redbytefx) 1.2.0: the generations run in an OpenGL ES 3.1
 compute shader written in the RedByteFX Kotlin DSL, and the cells are drawn as instanced spheres in
-a viscous liquid with OpenGL ES 3.0.
+a viscous liquid with OpenGL ES 3.0. The camera sits inside the medium, so the colony fills the
+screen instead of sitting in a box.
 
 [Русская версия](README.ru.md)
 
@@ -11,10 +12,10 @@ a viscous liquid with OpenGL ES 3.0.
 
 - Two worlds: a looped torus, and an infinite field whose simulated window follows the colony while
   you travel through it with one finger.
-- Six rules in B/S notation over the 26 neighbours of a cell: Pulse, Sponge, Reef, Shells, Crystal,
-  and Carter Bays' classic 4555.
-- Settings for cell colour, field size (16³ to 40³), starting cells (a number or random), speed, and
-  liquid flow.
+- Seven rules in Generations notation (B/S/C) over the 26 neighbours of a cell: Lava, Reef, Amoeba,
+  Waves, Builder, Moss, and Carter Bays' classic 4555. With more than two states a dying cell fades
+  through refractory states, which is what makes waves, shells, and colonies that die out.
+- Settings for cell colour, field size (24³ to 64³), starting cells (a number or random), and speed.
 - Gestures: turn, tilt, zoom, and tap to spark a cloud of new life.
 - English and Russian.
 
@@ -26,6 +27,7 @@ a viscous liquid with OpenGL ES 3.0.
 | Cells and liquid in one GLES 3.0 program | [`gl/LifeScene.kt`](app/src/main/java/ru/redbyte/life3d/gl/LifeScene.kt) |
 | CPU reference of the same rule | [`domain/CpuLife.kt`](app/src/main/java/ru/redbyte/life3d/domain/CpuLife.kt) |
 | Generation loop, read back, window following | [`engine/LifeEngine.kt`](app/src/main/java/ru/redbyte/life3d/engine/LifeEngine.kt) |
+| Cells around the camera, with every torus copy in view | [`domain/CellView.kt`](app/src/main/java/ru/redbyte/life3d/domain/CellView.kt) |
 | Frame drawing | [`engine/LifeRenderer.kt`](app/src/main/java/ru/redbyte/life3d/engine/LifeRenderer.kt) |
 
 `GpuMatchesCpuTest` runs the compute shader on a device and compares every cell with the CPU

@@ -5,7 +5,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class LifeSceneTest {
-
     private val scene = lifeScene()
 
     @Test
@@ -13,7 +12,7 @@ class LifeSceneTest {
         val vertex = scene.program.vertexSource()
 
         assertTrue(vertex, vertex.contains("a_model0"))
-        assertTrue(vertex, vertex.contains("mod("))
+        assertTrue(vertex, vertex.contains("distance("))
     }
 
     @Test
@@ -21,7 +20,7 @@ class LifeSceneTest {
         val model = backgroundModel()
 
         assertEquals(BACKGROUND_MARK, model[3])
-        assertTrue(BACKGROUND_MARK < -5f)
+        assertTrue(BACKGROUND_MARK < -500f)
         assertTrue(scene.program.fragmentSource().contains("sin("))
     }
 }

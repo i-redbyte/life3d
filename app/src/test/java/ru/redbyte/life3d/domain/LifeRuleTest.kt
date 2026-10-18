@@ -5,10 +5,9 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class LifeRuleTest {
-
     @Test
     fun ruleUniformsListBirthThenSurvivalForEveryNeighbourCount() {
-        val rule = LifeRule.Bays4555
+        val rule = LifeRule.Bays4555.rule
 
         val values = rule.uniformValues()
 
@@ -23,11 +22,12 @@ class LifeRuleTest {
     fun everyPresetHasANameInBothNotationsAndASensibleSeedDensity() {
         for (rule in LifeRule.entries) {
             assertTrue(rule.notation, rule.notation.startsWith("B") && "/S" in rule.notation)
-            assertTrue(rule.birth.isNotEmpty())
+            assertTrue(rule.rule.birth.isNotEmpty())
             assertTrue(rule.seedDensity in 0.05f..0.9f)
         }
-        assertEquals("B5/S4-5", LifeRule.Bays4555.notation)
-        assertEquals("B6-7,9,12/S5-8", LifeRule.Reef.notation)
-        assertEquals("B1,3/S0-6", LifeRule.Crystal.notation)
+        assertEquals("B5/S4-5/C2", LifeRule.Bays4555.notation)
+        assertEquals("B6-7,9,12/S5-8/C4", LifeRule.Reef.notation)
+        assertEquals("B4/S4/C5", LifeRule.Waves.notation)
+        assertEquals("B5-7,12-13,15/S9-26/C5", LifeRule.Amoeba.notation)
     }
 }

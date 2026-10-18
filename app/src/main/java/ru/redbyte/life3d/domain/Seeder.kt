@@ -4,12 +4,10 @@ import kotlin.math.PI
 import kotlin.math.cbrt
 import kotlin.random.Random
 
-/** How many cells the first generation starts with; [random] picks a count from [range]. */
 data class StartCells(val count: Int, val random: Boolean) {
     companion object {
         private const val MIN_CELLS = 20
 
-        /** Allowed start counts for an [n]³ field: from a small seed up to a quarter of the field. */
         fun range(n: Int): IntRange = MIN_CELLS..(n * n * n / 4).coerceAtLeast(MIN_CELLS)
 
         fun resolve(start: StartCells, n: Int, random: Random): Int {
@@ -19,13 +17,7 @@ data class StartCells(val count: Int, val random: Boolean) {
     }
 }
 
-/** Places the first generation as a random cloud in the middle of the field. */
 object Seeder {
-
-    /**
-     * An [n]³ world with exactly [cells] live cells (or every cell, if the field is smaller),
-     * scattered inside a ball sized so that it is about [density] full.
-     */
     fun seed(n: Int, cells: Int, density: Float, random: Random): FloatArray {
         val world = FloatArray(n * n * n)
         val wanted = cells.coerceIn(0, world.size)
@@ -41,7 +33,6 @@ object Seeder {
         return world
     }
 
-    /** Radius of a ball whose volume holds [cells] cells at [density]; never wider than the field. */
     fun ballRadius(cells: Int, density: Float, n: Int): Float {
         val volume = cells / density.coerceIn(MIN_DENSITY, 1f)
         return cbrt(3f * volume / (4f * PI.toFloat())).coerceAtMost(n.toFloat())

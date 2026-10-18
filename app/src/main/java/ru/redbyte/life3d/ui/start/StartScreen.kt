@@ -113,7 +113,6 @@ fun StartScreen(
                 SizeSection(settings, onChange)
                 StartCellsSection(settings, onChange)
                 SpeedSection(settings, onChange)
-                if (settings.mode == FieldMode.Torus) FlowSection(settings, onChange)
             }
             Spacer(Modifier.height(28.dp))
             StartButton(accent, onStart)
@@ -122,7 +121,6 @@ fun StartScreen(
     }
 }
 
-/** Slow glowing blobs in the accent colour: a hint of the liquid the cells live in. */
 @Composable
 private fun LiquidBackdrop(accent: Color) {
     val turn by rememberInfiniteTransition(label = "liquid").animateFloat(
@@ -364,17 +362,6 @@ private fun SpeedSection(settings: LifeSettings, onChange: (LifeSettings) -> Uni
 }
 
 @Composable
-private fun FlowSection(settings: LifeSettings, onChange: (LifeSettings) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f).padding(end = 12.dp)) {
-            SectionTitle(stringResource(R.string.section_flow))
-            Caption(stringResource(R.string.flow_hint))
-        }
-        LifeSwitch(settings.flow) { onChange(settings.copy(flow = it)) }
-    }
-}
-
-@Composable
 private fun LifeChip(selected: Boolean, label: String, onClick: () -> Unit) {
     FilterChip(
         selected = selected,
@@ -434,7 +421,6 @@ private fun LifeSwitch(checked: Boolean, onChange: (Boolean) -> Unit) {
     )
 }
 
-/** A wide glowing pill that breathes slowly, in the chosen cell colour. */
 @Composable
 private fun StartButton(accent: Color, onStart: () -> Unit) {
     val breath by rememberInfiniteTransition(label = "start").animateFloat(
@@ -487,21 +473,23 @@ private val CellPalette.label: Int
 
 private val LifeRule.label: Int
     get() = when (this) {
-        LifeRule.Pulse -> R.string.rule_pulse
-        LifeRule.Sponge -> R.string.rule_sponge
+        LifeRule.Lava -> R.string.rule_lava
         LifeRule.Reef -> R.string.rule_reef
-        LifeRule.Shells -> R.string.rule_shells
-        LifeRule.Crystal -> R.string.rule_crystal
+        LifeRule.Amoeba -> R.string.rule_amoeba
+        LifeRule.Waves -> R.string.rule_waves
+        LifeRule.Builder -> R.string.rule_builder
+        LifeRule.Moss -> R.string.rule_moss
         LifeRule.Bays4555 -> R.string.rule_bays4555
     }
 
 private val LifeRule.hint: Int
     get() = when (this) {
-        LifeRule.Pulse -> R.string.rule_pulse_hint
-        LifeRule.Sponge -> R.string.rule_sponge_hint
+        LifeRule.Lava -> R.string.rule_lava_hint
         LifeRule.Reef -> R.string.rule_reef_hint
-        LifeRule.Shells -> R.string.rule_shells_hint
-        LifeRule.Crystal -> R.string.rule_crystal_hint
+        LifeRule.Amoeba -> R.string.rule_amoeba_hint
+        LifeRule.Waves -> R.string.rule_waves_hint
+        LifeRule.Builder -> R.string.rule_builder_hint
+        LifeRule.Moss -> R.string.rule_moss_hint
         LifeRule.Bays4555 -> R.string.rule_bays4555_hint
     }
 

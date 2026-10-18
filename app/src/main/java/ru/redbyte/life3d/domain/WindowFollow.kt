@@ -3,15 +3,7 @@ package ru.redbyte.life3d.domain
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-/**
- * Keeps the simulated window of an infinite field over the colony.
- *
- * When the centre of the live cells strays more than an eighth of the window from its middle, the
- * window moves toward it, at most a quarter of its edge per generation, so cells rarely reach the
- * walls where they would be cut off.
- */
 object WindowFollow {
-
     fun shiftFor(centroid: FloatArray, population: Int, n: Int): IntArray {
         val shift = IntArray(3)
         if (population == 0) return shift

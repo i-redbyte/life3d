@@ -3,12 +3,6 @@ package ru.redbyte.life3d.engine
 import ru.redbyte.life3d.gl.LifeCompute
 import ru.redbyte.redbytefx.gl.compose.GlController
 
-/**
- * [LifeGpu] on a RedByteFX [GlController] hosting [compute].
- *
- * Every call only queues work for the compute view's GL thread: uniform writes are applied before
- * the queued dispatch, and the read back runs after it, in the order they were made.
- */
 class ControllerGpu(
     private val controller: GlController,
     private val compute: LifeCompute,
@@ -22,6 +16,8 @@ class ControllerGpu(
         controller.set(compute.shiftY, y)
         controller.set(compute.shiftZ, z)
     }
+
+    override fun decay(states: Int) = controller.set(compute.decay, states)
 
     override fun rules(values: FloatArray) = controller.set(compute.rules, values)
 

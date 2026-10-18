@@ -7,7 +7,6 @@ import org.junit.Test
 import kotlin.random.Random
 
 class SeederTest {
-
     @Test
     fun seedsExactlyTheRequestedNumberOfCellsAroundTheCentre() {
         val n = 24

@@ -5,7 +5,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class WindowFollowTest {
-
     @Test
     fun aColonyNearTheMiddleKeepsTheWindowInPlace() {
         assertArrayEquals(intArrayOf(0, 0, 0), WindowFollow.shiftFor(floatArrayOf(12.5f, 10f, 13f), population = 50, n = 24))
@@ -24,17 +23,19 @@ class WindowFollowTest {
     }
 
     @Test
-    fun packingRecordsTheCentroidOfLiveCellsAndTheWindowOrigin() {
+    fun aGenerationRecordsTheCentroidOfLiveCellsAndItsCounts() {
         val n = 4
         val cells = FloatArray(n * n * n)
         cells[cellIndex(0, 0, 0, n)] = 1f
         cells[cellIndex(2, 2, 0, n)] = 4f
         cells[cellIndex(3, 3, 3, n)] = DYING
 
-        val packed = InstancePacker.pack(cells, offset = 0, n = n, origin = intArrayOf(5, -2, 7))
+        val generation = Generation.of(cells, offset = 0, n = n, origin = intArrayOf(5, -2, 7), number = 3)
 
-        assertArrayEquals(floatArrayOf(1f, 1f, 0f), packed.centroid, 1e-6f)
-        assertArrayEquals(intArrayOf(5, -2, 7), packed.origin)
-        assertEquals(2, packed.population)
+        assertArrayEquals(floatArrayOf(1f, 1f, 0f), generation.centroid, 1e-6f)
+        assertArrayEquals(intArrayOf(5, -2, 7), generation.origin)
+        assertEquals(2, generation.population)
+        assertEquals(1, generation.fading)
+        assertEquals(3, generation.number)
     }
 }

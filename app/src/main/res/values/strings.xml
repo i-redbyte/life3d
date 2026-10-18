@@ -18,7 +18,6 @@
     <string name="section_size">Field size</string>
     <string name="section_start">Starting cells</string>
     <string name="section_speed">Speed</string>
-    <string name="section_flow">Liquid flow</string>
 
     <string name="palette_turquoise">Turquoise</string>
     <string name="palette_amber">Amber</string>
@@ -27,22 +26,7 @@
     <string name="palette_lime">Lime</string>
     <string name="palette_coral">Coral</string>
 
-    <string name="rule_bays4555">Bays 4555</string>
-    <string name="rule_bays4555_hint">The classic 3D Life with gliders. It soon settles down: tap to spark new life.</string>
-    <string name="rule_crystal">Crystal</string>
-    <string name="rule_crystal_hint">A lattice grows outward from a small seed.</string>
-    <string name="rule_pulse">Pulse</string>
-    <string name="rule_pulse_hint">Flickering chaos that fills about a sixth of the field.</string>
-    <string name="rule_sponge">Sponge</string>
-    <string name="rule_sponge_hint">A porous mass that keeps reshaping itself.</string>
-    <string name="rule_reef">Reef</string>
-    <string name="rule_reef_hint">Branching growth, rebuilt every generation.</string>
-    <string name="rule_shells">Shells</string>
-    <string name="rule_shells_hint">Hollow shells that bloom and burst.</string>
-    <string name="rule_notation">Rule %1$s: a cell is born (B) or survives (S) with that many of its 26 neighbours.</string>
-
     <string name="start_random">Random</string>
-    <string name="flow_hint">The field drifts through the walls of the torus: cells leaving one side come back from the other.</string>
 
     <string name="start_game">START</string>
 
@@ -54,6 +38,21 @@
     <string name="population">Alive: %1$d</string>
     <string name="needs_gles31">Life 3D computes generations with OpenGL ES 3.1 compute shaders, which this device does not support.</string>
 
+    <string name="rule_lava">Lava</string>
+    <string name="rule_lava_hint">Smoulders: a thin living crust over cooling cells.</string>
+    <string name="rule_reef">Reef</string>
+    <string name="rule_reef_hint">Branches outward like coral.</string>
+    <string name="rule_amoeba">Amoeba</string>
+    <string name="rule_amoeba_hint">Grows into a soft, rounded body.</string>
+    <string name="rule_waves">Waves</string>
+    <string name="rule_waves_hint">A wave rolls outward, leaves a fading wake, and dies out.</string>
+    <string name="rule_builder">Builder</string>
+    <string name="rule_builder_hint">Flares up, then collapses into a few still crystals.</string>
+    <string name="rule_moss">Moss</string>
+    <string name="rule_moss_hint">Creeps outward slowly.</string>
+    <string name="rule_bays4555">Bays 4555</string>
+    <string name="rule_bays4555_hint">The classic 3D Life with gliders. It soon settles or dies: tap to spark new life.</string>
+    <string name="rule_notation">Rule %1$s: a cell is born (B) or survives (S) with that many live neighbours out of 26; with C states, a dying cell fades through C − 2 steps before it can be born again.</string>
     <string name="size_value">%1$d³ = %2$s</string>
     <string name="start_random_value">from %1$d to %2$s</string>
     <plurals name="cells">

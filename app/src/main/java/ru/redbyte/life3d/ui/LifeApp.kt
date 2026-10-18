@@ -21,7 +21,6 @@ import ru.redbyte.life3d.ui.start.StartScreen
 import ru.redbyte.life3d.ui.theme.LifeTheme
 import ru.redbyte.life3d.ui.theme.color
 
-/** Two screens: the settings and the field. Both survive rotation and process death. */
 @Composable
 fun LifeApp() {
     var settings by rememberSaveable(stateSaver = SettingsSaver) { mutableStateOf(LifeSettings()) }
@@ -42,7 +41,7 @@ fun LifeApp() {
 }
 
 private val SettingsSaver: Saver<LifeSettings, Any> = listSaver(
-    save = { listOf(it.palette.name, it.rule.name, it.gridSize, it.start.count, it.start.random, it.speed, it.flow, it.mode.name) },
+    save = { listOf(it.palette.name, it.rule.name, it.gridSize, it.start.count, it.start.random, it.speed, it.mode.name) },
     restore = { saved ->
         LifeSettings(
             palette = CellPalette.valueOf(saved[0] as String),
@@ -50,8 +49,7 @@ private val SettingsSaver: Saver<LifeSettings, Any> = listSaver(
             gridSize = saved[2] as Int,
             start = StartCells(count = saved[3] as Int, random = saved[4] as Boolean),
             speed = saved[5] as Int,
-            flow = saved[6] as Boolean,
-            mode = FieldMode.valueOf(saved[7] as String),
+            mode = FieldMode.valueOf(saved[6] as String),
         )
     },
 )

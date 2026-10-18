@@ -6,7 +6,6 @@ import org.junit.Test
 import ru.redbyte.life3d.gl.WORKGROUP_EDGE
 
 class LifeSettingsTest {
-
     @Test
     fun everyFieldSizeSplitsIntoWholeWorkgroups() {
         for (size in LifeSettings.GRID_SIZES) assertEquals(0, size % WORKGROUP_EDGE)

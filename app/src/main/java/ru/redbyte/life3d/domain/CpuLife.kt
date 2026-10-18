@@ -2,25 +2,13 @@ package ru.redbyte.life3d.domain
 
 import kotlin.math.min
 
-/**
- * Reference implementation of one generation on the CPU.
- *
- * The game runs the same rule in a compute shader; this version exists so the shader can be
- * checked against something obviously correct, and so the rule semantics are readable in Kotlin.
- */
 object CpuLife {
-
     private val NO_SHIFT = IntArray(3)
 
-    /**
-     * The next generation of [world]. In [FieldMode.Infinite] the window first moves by [shift]
-     * cells over the world: new cell `c` continues old cell `c + shift`, and what leaves the window
-     * is gone.
-     */
     fun step(
         world: FloatArray,
         n: Int,
-        rule: LifeRule,
+        rule: Rule,
         mode: FieldMode = FieldMode.Torus,
         shift: IntArray = NO_SHIFT,
     ): FloatArray {
@@ -31,20 +19,23 @@ object CpuLife {
             val sy = y + shift[1]
             val sz = z + shift[2]
             val value = cell(world, n, sx, sy, sz, mode)
-            val alive = value > ALIVE
-            val count = neighbours(world, n, sx, sy, sz, mode)
-            val lives = if (alive) count in rule.survive else count in rule.birth
-            next[cellIndex(x, y, z, n)] = when {
-                lives && alive -> min(value + 1f, MAX_AGE)
-                lives -> 1f
-                alive -> DYING
-                else -> 0f
-            }
+            next[cellIndex(x, y, z, n)] = nextValue(value, neighbours(world, n, sx, sy, sz, mode), rule)
         }
         return next
     }
 
-    /** Live cells among the 26 neighbours of ([x], [y], [z]). */
+    fun nextValue(value: Float, count: Int, rule: Rule): Float {
+        val alive = value > ALIVE
+        val refractory = value < -ALIVE && rule.decay > 0
+        return when {
+            alive && count in rule.survive -> min(value + 1f, MAX_AGE)
+            alive -> if (rule.decay > 0) -rule.decay.toFloat() else DYING
+            refractory -> value + 1f
+            count in rule.birth -> 1f
+            else -> 0f
+        }
+    }
+
     fun neighbours(world: FloatArray, n: Int, x: Int, y: Int, z: Int, mode: FieldMode = FieldMode.Torus): Int {
         var count = 0
         for (dz in -1..1) for (dy in -1..1) for (dx in -1..1) {
@@ -54,7 +45,6 @@ object CpuLife {
         return count
     }
 
-    /** The value at a coordinate one step or one shift outside the window at most. */
     private fun cell(world: FloatArray, n: Int, x: Int, y: Int, z: Int, mode: FieldMode): Float = when (mode) {
         FieldMode.Torus -> world[cellIndex(wrap(x, n), wrap(y, n), wrap(z, n), n)]
         FieldMode.Infinite -> if (x in 0 until n && y in 0 until n && z in 0 until n) world[cellIndex(x, y, z, n)] else 0f

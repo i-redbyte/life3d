@@ -13,15 +13,6 @@ import ru.redbyte.life3d.domain.FieldMode
 import ru.redbyte.life3d.domain.OrbitCamera
 import kotlin.math.abs
 
-/**
- * Camera gestures for the field.
- *
- * - One finger: turns the field on a torus, moves through the world in an infinite field.
- * - Two fingers: twist turns, moving both up or down tilts, pinch zooms, in both modes.
- *
- * Movement counts only after the touch slop, so a tap with a trembling finger still reaches the
- * tap detector instead of nudging the camera.
- */
 fun Modifier.fieldGestures(camera: OrbitCamera, mode: FieldMode, onTouch: () -> Unit): Modifier =
     pointerInput(camera, mode) {
         awaitEachGesture {

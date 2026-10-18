@@ -18,7 +18,6 @@
     <string name="section_size">Размер поля</string>
     <string name="section_start">Стартовые клетки</string>
     <string name="section_speed">Скорость</string>
-    <string name="section_flow">Течение среды</string>
 
     <string name="palette_turquoise">Бирюза</string>
     <string name="palette_amber">Янтарь</string>
@@ -27,22 +26,7 @@
     <string name="palette_lime">Лайм</string>
     <string name="palette_coral">Коралл</string>
 
-    <string name="rule_bays4555">Бэйс 4555</string>
-    <string name="rule_bays4555_hint">Классическая 3D-«Жизнь» с глайдерами. Быстро успокаивается: тапайте, чтобы оживить.</string>
-    <string name="rule_crystal">Кристалл</string>
-    <string name="rule_crystal_hint">Решётка разрастается из маленького зерна.</string>
-    <string name="rule_pulse">Пульс</string>
-    <string name="rule_pulse_hint">Мерцающий хаос, который занимает около шестой части поля.</string>
-    <string name="rule_sponge">Губка</string>
-    <string name="rule_sponge_hint">Пористая масса, которая всё время меняет форму.</string>
-    <string name="rule_reef">Риф</string>
-    <string name="rule_reef_hint">Ветвистый рост, перестраивается каждое поколение.</string>
-    <string name="rule_shells">Оболочки</string>
-    <string name="rule_shells_hint">Полые оболочки расцветают и лопаются.</string>
-    <string name="rule_notation">Правило %1$s: клетка рождается (B) или выживает (S) при таком числе живых соседей из 26.</string>
-
     <string name="start_random">Случайно</string>
-    <string name="flow_hint">Поле дрейфует сквозь стенки тора: клетки, ушедшие за одну грань, возвращаются с противоположной.</string>
 
     <string name="start_game">СТАРТ</string>
 
@@ -54,6 +38,21 @@
     <string name="population">Живых: %1$d</string>
     <string name="needs_gles31">«Жизнь 3D» считает поколения compute-шейдерами OpenGL ES 3.1, а это устройство их не поддерживает.</string>
 
+    <string name="rule_lava">Лава</string>
+    <string name="rule_lava_hint">Тлеет: тонкая живая корка над остывающими клетками.</string>
+    <string name="rule_reef">Риф</string>
+    <string name="rule_reef_hint">Разрастается ветвями, как коралл.</string>
+    <string name="rule_amoeba">Амёба</string>
+    <string name="rule_amoeba_hint">Вырастает в мягкое округлое тело.</string>
+    <string name="rule_waves">Волны</string>
+    <string name="rule_waves_hint">Волна расходится, оставляет гаснущий след и затухает.</string>
+    <string name="rule_builder">Строитель</string>
+    <string name="rule_builder_hint">Вспыхивает, а потом схлопывается в несколько застывших кристаллов.</string>
+    <string name="rule_moss">Мох</string>
+    <string name="rule_moss_hint">Медленно расползается во все стороны.</string>
+    <string name="rule_bays4555">Бэйс 4555</string>
+    <string name="rule_bays4555_hint">Классическая 3D-«Жизнь» с глайдерами. Быстро успокаивается или вымирает: тапайте, чтобы оживить.</string>
+    <string name="rule_notation">Правило %1$s: клетка рождается (B) или выживает (S) при таком числе живых соседей из 26; при C состояниях отмирающая клетка гаснет C − 2 поколения и всё это время не может родиться заново.</string>
     <string name="size_value">%1$d³ = %2$s</string>
     <string name="start_random_value">от %1$d до %2$s</string>
     <plurals name="cells">
