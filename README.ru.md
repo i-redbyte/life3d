@@ -44,6 +44,12 @@ OpenGL ES 3.1, написанный на Kotlin DSL библиотеки RedByte
 Android 7.0 (API 24) и новее с OpenGL ES 3.1. Эмулятор Android на Apple silicon даёт только
 OpenGL ES 3.0, поэтому запускайте игру на устройстве или на эмуляторе со SwiftShader.
 
+## Скачать
+
+[Скачать последний APK](https://github.com/i-redbyte/life3d/releases/download/apk/life3d.apk). CI собирает его из каждого push
+в `main`, после того как прошли unit-тесты и lint. APK подписан debug-ключом, поэтому для установки новой сборки поверх
+старой может понадобиться сначала удалить старую.
+
 ## Сборка
 
 ```bash

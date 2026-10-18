@@ -44,6 +44,12 @@ reference, for every rule and both worlds.
 Android 7.0 (API 24) or newer with OpenGL ES 3.1. The Android Emulator on Apple silicon exposes only
 OpenGL ES 3.0, so run the game on a device or on an emulator with SwiftShader.
 
+## Download
+
+[Download the latest APK](https://github.com/i-redbyte/life3d/releases/download/apk/life3d.apk). CI builds it from every push to
+`main` once the unit tests and lint pass. The APK is debug-signed, so installing a newer build over an older one may require
+removing the old one first.
+
 ## Build
 
 ```bash

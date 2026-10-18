@@ -1,0 +1,71 @@
+name: Android
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Android build setup
+        uses: ./.github/actions/android-setup
+
+      - name: Unit tests, lint, and debug APK
+        run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug --no-daemon
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: life3d-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+  publish:
+    needs: check
+    if: >-
+      github.event_name != 'pull_request' &&
+      github.ref == 'refs/heads/main' &&
+      github.repository == 'i-redbyte/life3d'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: publish-apk
+      cancel-in-progress: false
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+        with:
+          name: life3d-apk
+
+      - name: Publish APK to the apk release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          mv app-debug.apk life3d.apk
+          notes="Последняя сборка Life 3D из main. Коммит: ${SHA}"
+          if gh release view apk --repo "$REPO" > /dev/null 2>&1; then
+            gh release edit apk --repo "$REPO" --title "Life 3D APK" --notes "$notes"
+          else
+            gh release create apk --repo "$REPO" --title "Life 3D APK" --notes "$notes" --latest
+          fi
+          gh release upload apk life3d.apk --repo "$REPO" --clobber
