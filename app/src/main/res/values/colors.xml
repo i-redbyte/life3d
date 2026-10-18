@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="life_background">#FF060B14</color>
+    <color name="life_icon_back">#FF07121F</color>
+</resources>

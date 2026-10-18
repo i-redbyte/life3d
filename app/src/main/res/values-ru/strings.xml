@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Жизнь 3D</string>
+    <string name="title_life">ЖИЗНЬ</string>
+    <string name="title_badge">3D</string>
+    <string name="subtitle">Клеточный автомат Конвея в трёх измерениях, в вязкой живой среде</string>
+
+    <string name="section_mode">Мир</string>
+    <string name="mode_torus">Зацикленный тор</string>
+    <string name="mode_torus_hint">Поле замкнуто само на себя: всё, что уходит за одну грань, возвращается с противоположной.</string>
+    <string name="mode_infinite">Бесконечное поле</string>
+    <string name="mode_infinite_hint">Мир без стен. Окно симуляции следует за колонией; ведите одним пальцем, чтобы перемещаться, но далеко от клеток не уйти.</string>
+    <string name="size_window">Окно %1$d³ следует за колонией</string>
+    <string name="gesture_hint_torus">Один палец — поворот · два пальца — наклон и масштаб · тап — вспышка жизни</string>
+    <string name="gesture_hint_infinite">Один палец — перемещение · два пальца — поворот, наклон и масштаб · тап — вспышка жизни</string>
+    <string name="section_color">Цвет клеток</string>
+    <string name="section_rule">Правила</string>
+    <string name="section_size">Размер поля</string>
+    <string name="section_start">Стартовые клетки</string>
+    <string name="section_speed">Скорость</string>
+    <string name="section_flow">Течение среды</string>
+
+    <string name="palette_turquoise">Бирюза</string>
+    <string name="palette_amber">Янтарь</string>
+    <string name="palette_fuchsia">Фуксия</string>
+    <string name="palette_azure">Лазурь</string>
+    <string name="palette_lime">Лайм</string>
+    <string name="palette_coral">Коралл</string>
+
+    <string name="rule_bays4555">Бэйс 4555</string>
+    <string name="rule_bays4555_hint">Классическая 3D-«Жизнь» с глайдерами. Быстро успокаивается: тапайте, чтобы оживить.</string>
+    <string name="rule_crystal">Кристалл</string>
+    <string name="rule_crystal_hint">Решётка разрастается из маленького зерна.</string>
+    <string name="rule_pulse">Пульс</string>
+    <string name="rule_pulse_hint">Мерцающий хаос, который занимает около шестой части поля.</string>
+    <string name="rule_sponge">Губка</string>
+    <string name="rule_sponge_hint">Пористая масса, которая всё время меняет форму.</string>
+    <string name="rule_reef">Риф</string>
+    <string name="rule_reef_hint">Ветвистый рост, перестраивается каждое поколение.</string>
+    <string name="rule_shells">Оболочки</string>
+    <string name="rule_shells_hint">Полые оболочки расцветают и лопаются.</string>
+    <string name="rule_notation">Правило %1$s: клетка рождается (B) или выживает (S) при таком числе живых соседей из 26.</string>
+
+    <string name="start_random">Случайно</string>
+    <string name="flow_hint">Поле дрейфует сквозь стенки тора: клетки, ушедшие за одну грань, возвращаются с противоположной.</string>
+
+    <string name="start_game">СТАРТ</string>
+
+    <string name="back">Назад</string>
+    <string name="pause">Пауза</string>
+    <string name="resume">Продолжить</string>
+    <string name="restart">Заново</string>
+    <string name="generation">Поколение %1$d</string>
+    <string name="population">Живых: %1$d</string>
+    <string name="needs_gles31">«Жизнь 3D» считает поколения compute-шейдерами OpenGL ES 3.1, а это устройство их не поддерживает.</string>
+
+    <string name="size_value">%1$d³ = %2$s</string>
+    <string name="start_random_value">от %1$d до %2$s</string>
+    <plurals name="cells">
+        <item quantity="one">%1$d клетка</item>
+        <item quantity="few">%1$d клетки</item>
+        <item quantity="many">%1$d клеток</item>
+        <item quantity="other">%1$d клетки</item>
+    </plurals>
+    <plurals name="generations_per_second">
+        <item quantity="one">%1$d поколение в секунду</item>
+        <item quantity="few">%1$d поколения в секунду</item>
+        <item quantity="many">%1$d поколений в секунду</item>
+        <item quantity="other">%1$d поколения в секунду</item>
+    </plurals>
+</resources>
