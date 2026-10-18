@@ -20,6 +20,18 @@
     <string name="section_speed">Скорость</string>
 
     <string name="palette_turquoise">Бирюза</string>
+    <string name="palette_emerald">Изумруд</string>
+    <string name="palette_aurora">Сияние</string>
+    <string name="palette_custom">Свой градиент</string>
+    <string name="gradient_title">Свой градиент</string>
+    <string name="gradient_start">Начало</string>
+    <string name="gradient_end">Конец</string>
+    <string name="gradient_hue">Оттенок</string>
+    <string name="gradient_saturation">Насыщенность</string>
+    <string name="gradient_brightness">Яркость</string>
+    <string name="gradient_edit">Изменить цвета</string>
+    <string name="done">Готово</string>
+    <string name="cancel">Отмена</string>
     <string name="palette_amber">Янтарь</string>
     <string name="palette_fuchsia">Фуксия</string>
     <string name="palette_azure">Лазурь</string>

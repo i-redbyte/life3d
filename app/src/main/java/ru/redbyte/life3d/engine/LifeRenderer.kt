@@ -37,6 +37,8 @@ class LifeRenderer(
     private val focus = FloatArray(3)
     private val interval = settings.intervalMillis * NANOS_PER_MILLI
     private val decay = settings.rule.rule.decay.toFloat()
+    private val start = settings.colors.start
+    private val end = settings.colors.end
     private var lastSeconds = 0f
     private var cells: CellView? = null
     private var cellsOf: Generation? = null
@@ -67,8 +69,8 @@ class LifeRenderer(
         runtime.set(scene.projection, projection)
         runtime.set(scene.eye, eye[0], eye[1], eye[2])
         runtime.set(scene.light, LIGHT_X, LIGHT_Y, LIGHT_Z)
-        val palette = settings.palette
-        runtime.set(scene.cellColor, palette.red, palette.green, palette.blue)
+        runtime.set(scene.cellColor, start.red, start.green, start.blue)
+        runtime.set(scene.cellColorEnd, end.red, end.green, end.blue)
         runtime.set(scene.phase, ((clock() - engine.latestAt).toFloat() / interval).coerceIn(0f, 1f))
         runtime.set(scene.time, now)
         runtime.set(scene.aspect, frame.aspect)

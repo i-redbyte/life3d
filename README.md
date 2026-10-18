@@ -8,6 +8,10 @@ screen instead of sitting in a box.
 
 [Русская версия](README.ru.md)
 
+| Looped torus · Emerald · Lava | Infinite field · Aurora · Lava |
+| :---: | :---: |
+| <img src="media/torus.gif" width="300" alt="Lava rule on a looped torus in emerald"> | <img src="media/infinite.gif" width="300" alt="Lava rule in an infinite field with the Aurora gradient"> |
+
 ## Features
 
 - Two worlds: a looped torus, and an infinite field whose simulated window follows the colony while
@@ -15,7 +19,9 @@ screen instead of sitting in a box.
 - Seven rules in Generations notation (B/S/C) over the 26 neighbours of a cell: Lava, Reef, Amoeba,
   Waves, Builder, Moss, and Carter Bays' classic 4555. With more than two states a dying cell fades
   through refractory states, which is what makes waves, shells, and colonies that die out.
-- Settings for cell colour, field size (24³ to 64³), starting cells (a number or random), and speed.
+- Cell colours: seven solid colours, the Aurora gradient, and your own gradient picked in a dialog
+  by hue, saturation, and brightness.
+- Settings for field size (24³ to 64³), starting cells (a number or random), and speed.
 - Gestures: turn, tilt, zoom, and tap to spark a cloud of new life.
 - English and Russian.
 

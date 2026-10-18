@@ -52,6 +52,7 @@ class LifeScene(
     val eye: Uniform<Vec3<Flt<High>>>,
     val light: Uniform<Vec3<Flt<High>>>,
     val cellColor: Uniform<Vec3<Flt<High>>>,
+    val cellColorEnd: Uniform<Vec3<Flt<High>>>,
     val phase: Uniform<Flt<High>>,
     val time: Uniform<Flt<High>>,
     val aspect: Uniform<Flt<High>>,
@@ -83,6 +84,7 @@ fun lifeScene(): LifeScene {
     lateinit var eye: Uniform<Vec3<Flt<High>>>
     lateinit var light: Uniform<Vec3<Flt<High>>>
     lateinit var cellColor: Uniform<Vec3<Flt<High>>>
+    lateinit var cellColorEnd: Uniform<Vec3<Flt<High>>>
     lateinit var phase: Uniform<Flt<High>>
     lateinit var time: Uniform<Flt<High>>
     lateinit var aspect: Uniform<Flt<High>>
@@ -101,6 +103,7 @@ fun lifeScene(): LifeScene {
         eye = uniformVec3("eye", 0f, 0f, 3f)
         light = uniformVec3("light", 0.4f, 0.8f, 0.45f)
         cellColor = uniformVec3("cell_color", 0.25f, 0.95f, 0.78f)
+        cellColorEnd = uniformVec3("cell_color_end", 0.25f, 0.95f, 0.78f)
         phase = uniform("phase", 1f)
         time = uniform("time", 0f)
         aspect = uniform("aspect", 1f)
@@ -118,6 +121,7 @@ fun lifeScene(): LifeScene {
         val world = varyingVec3("world")
         val state = varyingFloat("state")
         val screen = varyingVec2("screen")
+        val paint = varyingFloat("paint")
 
         vertex {
             val position = attributeVec3("position")
@@ -151,13 +155,15 @@ fun lifeScene(): LifeScene {
             normal.set(surface)
             world.set(placed)
             state.set(value)
+            val band = sin(dot(cell, vec3(0.19f.lit, 0.13f.lit, 0.09f.lit)) + time.expr * 0.45f)
+            paint.set(smoothstep(-0.6f, 0.6f, band))
             screen.set(vec2(position.x, position.y) * 0.5f + 0.5f)
             val scene = projection.expr * (view.expr * vec4(placed.x, placed.y, placed.z, 1f.lit))
             glPosition(ifElse(background, vec4(position.x, position.y, 0.9999f.lit, 1f.lit), scene))
         }
 
         fragment {
-            val tint = cellColor.expr
+            val tint = mix(cellColor.expr, cellColorEnd.expr, paint.expr)
             val deep = tint * 0.06f + vec3(0.008f.lit, 0.014f.lit, 0.03f.lit)
             val shallow = tint * 0.24f + vec3(0.02f.lit, 0.035f.lit, 0.06f.lit)
 
@@ -197,7 +203,7 @@ fun lifeScene(): LifeScene {
         }
     }
     return LifeScene(
-        program, view, projection, eye, light, cellColor, phase, time, aspect, size, torus, decay,
+        program, view, projection, eye, light, cellColor, cellColorEnd, phase, time, aspect, size, torus, decay,
         origin, viewCentre, viewRadius, fogNear, fogFar, target,
     )
 }

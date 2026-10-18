@@ -20,6 +20,18 @@
     <string name="section_speed">Speed</string>
 
     <string name="palette_turquoise">Turquoise</string>
+    <string name="palette_emerald">Emerald</string>
+    <string name="palette_aurora">Aurora</string>
+    <string name="palette_custom">Custom gradient</string>
+    <string name="gradient_title">Your gradient</string>
+    <string name="gradient_start">Start</string>
+    <string name="gradient_end">End</string>
+    <string name="gradient_hue">Hue</string>
+    <string name="gradient_saturation">Saturation</string>
+    <string name="gradient_brightness">Brightness</string>
+    <string name="gradient_edit">Edit colours</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
     <string name="palette_amber">Amber</string>
     <string name="palette_fuchsia">Fuchsia</string>
     <string name="palette_azure">Azure</string>

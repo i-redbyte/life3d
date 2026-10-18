@@ -5,6 +5,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import ru.redbyte.life3d.domain.CellPalette
+import ru.redbyte.life3d.domain.Rgb
 
 object LifeColors {
     val Background = Color(0xFF060B14)
@@ -15,6 +16,10 @@ object LifeColors {
 }
 
 val CellPalette.color: Color get() = Color(red, green, blue)
+
+val CellPalette.endColor: Color get() = Color(endRed, endGreen, endBlue)
+
+val Rgb.color: Color get() = Color(red, green, blue)
 
 @Composable
 fun LifeTheme(accent: Color, content: @Composable () -> Unit) {

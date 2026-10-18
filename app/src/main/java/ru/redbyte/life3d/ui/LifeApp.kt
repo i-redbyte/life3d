@@ -11,7 +11,9 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import ru.redbyte.life3d.domain.CellColors
 import ru.redbyte.life3d.domain.CellPalette
+import ru.redbyte.life3d.domain.Rgb
 import ru.redbyte.life3d.domain.FieldMode
 import ru.redbyte.life3d.domain.LifeRule
 import ru.redbyte.life3d.domain.LifeSettings
@@ -25,7 +27,7 @@ import ru.redbyte.life3d.ui.theme.color
 fun LifeApp() {
     var settings by rememberSaveable(stateSaver = SettingsSaver) { mutableStateOf(LifeSettings()) }
     var playing by rememberSaveable { mutableStateOf(false) }
-    LifeTheme(accent = settings.palette.color) {
+    LifeTheme(accent = settings.colors.start.color) {
         AnimatedContent(
             targetState = playing,
             transitionSpec = { fadeIn() togetherWith fadeOut() },
@@ -41,7 +43,9 @@ fun LifeApp() {
 }
 
 private val SettingsSaver: Saver<LifeSettings, Any> = listSaver(
-    save = { listOf(it.palette.name, it.rule.name, it.gridSize, it.start.count, it.start.random, it.speed, it.mode.name) },
+    save = { listOf(it.palette.name, it.rule.name, it.gridSize, it.start.count, it.start.random, it.speed, it.mode.name,
+        it.custom.start.red, it.custom.start.green, it.custom.start.blue,
+        it.custom.end.red, it.custom.end.green, it.custom.end.blue) },
     restore = { saved ->
         LifeSettings(
             palette = CellPalette.valueOf(saved[0] as String),
@@ -50,6 +54,10 @@ private val SettingsSaver: Saver<LifeSettings, Any> = listSaver(
             start = StartCells(count = saved[3] as Int, random = saved[4] as Boolean),
             speed = saved[5] as Int,
             mode = FieldMode.valueOf(saved[6] as String),
+            custom = CellColors(
+                Rgb(saved[7] as Float, saved[8] as Float, saved[9] as Float),
+                Rgb(saved[10] as Float, saved[11] as Float, saved[12] as Float),
+            ),
         )
     },
 )

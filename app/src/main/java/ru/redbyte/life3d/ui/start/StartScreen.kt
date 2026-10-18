@@ -42,6 +42,9 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -80,7 +83,7 @@ fun StartScreen(
     onChange: (LifeSettings) -> Unit,
     onStart: () -> Unit,
 ) {
-    val accent by animateColorAsState(settings.palette.color, label = "accent")
+    val accent by animateColorAsState(settings.colors.start.color, label = "accent")
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -115,7 +118,7 @@ fun StartScreen(
                 SpeedSection(settings, onChange)
             }
             Spacer(Modifier.height(28.dp))
-            StartButton(accent, onStart)
+            StartButton(accent, settings.colors.end.color, onStart)
             Spacer(Modifier.height(12.dp))
         }
     }
@@ -232,6 +235,7 @@ private fun ModeSection(settings: LifeSettings, onChange: (LifeSettings) -> Unit
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PaletteSection(settings: LifeSettings, onChange: (LifeSettings) -> Unit) {
+    var editing by remember { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         SectionTitle(stringResource(R.string.section_color))
         FlowRow(
@@ -241,6 +245,7 @@ private fun PaletteSection(settings: LifeSettings, onChange: (LifeSettings) -> U
             for (palette in CellPalette.entries) {
                 val selected = palette == settings.palette
                 val name = stringResource(palette.label)
+                val colors = if (palette == CellPalette.Custom) settings.custom else palette.colors
                 Box(
                     modifier = Modifier
                         .size(36.dp)
@@ -248,13 +253,51 @@ private fun PaletteSection(settings: LifeSettings, onChange: (LifeSettings) -> U
                         .border(if (selected) 3.dp else 1.dp, if (selected) Color.White else LifeColors.PanelBorder, CircleShape)
                         .padding(5.dp)
                         .clip(CircleShape)
-                        .background(Brush.radialGradient(listOf(Color.White, palette.color), radius = 60f))
-                        .selectable(selected, role = Role.RadioButton) { onChange(settings.copy(palette = palette)) }
+                        .background(
+                            if (colors.gradient) {
+                                Brush.linearGradient(listOf(colors.start.color, colors.end.color))
+                            } else {
+                                Brush.radialGradient(listOf(Color.White, colors.start.color), radius = 60f)
+                            },
+                        )
+                        .selectable(selected, role = Role.RadioButton) {
+                            onChange(settings.copy(palette = palette))
+                            if (palette == CellPalette.Custom) editing = true
+                        }
                         .semantics { contentDescription = name },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    if (palette == CellPalette.Custom) {
+                        Text("✎", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Caption(stringResource(settings.palette.label))
+            if (settings.palette == CellPalette.Custom) {
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = stringResource(R.string.gradient_edit),
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable(role = Role.Button) { editing = true }
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
                 )
             }
         }
-        Caption(stringResource(settings.palette.label))
+    }
+    if (editing) {
+        GradientDialog(
+            initial = settings.custom,
+            onDone = {
+                onChange(settings.copy(palette = CellPalette.Custom, custom = it))
+                editing = false
+            },
+            onDismiss = { editing = false },
+        )
     }
 }
 
@@ -422,7 +465,7 @@ private fun LifeSwitch(checked: Boolean, onChange: (Boolean) -> Unit) {
 }
 
 @Composable
-private fun StartButton(accent: Color, onStart: () -> Unit) {
+private fun StartButton(accent: Color, end: Color, onStart: () -> Unit) {
     val breath by rememberInfiniteTransition(label = "start").animateFloat(
         initialValue = 0.35f,
         targetValue = 0.85f,
@@ -447,7 +490,7 @@ private fun StartButton(accent: Color, onStart: () -> Unit) {
                 )
             }
             .clip(shape)
-            .background(Brush.horizontalGradient(listOf(accent, Color.White.copy(alpha = 0.9f), accent)))
+            .background(Brush.horizontalGradient(listOf(accent, Color.White.copy(alpha = 0.9f), end)))
             .clickable(role = Role.Button, onClick = onStart),
         contentAlignment = Alignment.Center,
     ) {
@@ -464,6 +507,9 @@ private fun StartButton(accent: Color, onStart: () -> Unit) {
 private val CellPalette.label: Int
     get() = when (this) {
         CellPalette.Turquoise -> R.string.palette_turquoise
+        CellPalette.Emerald -> R.string.palette_emerald
+        CellPalette.Aurora -> R.string.palette_aurora
+        CellPalette.Custom -> R.string.palette_custom
         CellPalette.Amber -> R.string.palette_amber
         CellPalette.Fuchsia -> R.string.palette_fuchsia
         CellPalette.Azure -> R.string.palette_azure
