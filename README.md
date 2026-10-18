@@ -6,6 +6,10 @@ compute shader written in the RedByteFX Kotlin DSL, and the cells are drawn as i
 a viscous liquid with OpenGL ES 3.0. The camera sits inside the medium, so the colony fills the
 screen instead of sitting in a box.
 
+This project accompanies the Habr article
+[«Гравицапа для GPU: OpenGL ES на Kotlin DSL на примере 3D-“Жизни” Конвея»](https://habr.com/ru/articles/1095948/)
+(in Russian), which builds the game step by step and compares each step with plain OpenGL ES.
+
 [Русская версия](README.ru.md)
 
 | Looped torus · Emerald · Lava | Infinite field · Aurora · Lava |
